@@ -30,7 +30,7 @@ func (h *bookHandler) Index(c *gin.Context) {
 	var booksResponse []book.BookResponse
 
 	for _, item := range books {
-		booksResponse = append(booksResponse, bookResponse(item))
+		booksResponse = append(booksResponse, book.NewResponse(item))
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -76,20 +76,9 @@ func (h *bookHandler) Show(c *gin.Context) {
 			"errors": err,
 		})
 	}
-	book, err := h.bookService.Show(id)
+	item, err := h.bookService.Show(id)
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": bookResponse(book),
+		"data": book.NewResponse(item),
 	})
-}
-
-func bookResponse(b book.Book) book.BookResponse {
-	return book.BookResponse{
-		ID:          b.ID,
-		Title:       b.Title,
-		Price:       b.Price,
-		Description: b.Description,
-		Rating:      b.Rating,
-		Discount:    b.Discount,
-	}
 }
